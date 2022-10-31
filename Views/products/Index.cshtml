@@ -1,0 +1,400 @@
+﻿@*@model IEnumerable<hm6.Models.product>*@
+@model IPagedList<hm6.Models.product>
+@{
+    ViewBag.Title = "Index";
+}
+@using PagedList.Mvc;
+@using PagedList;
+
+<h2>Products</h2>
+@*<input type="search" value="Enter product name..." class="form-control" />
+    <input type="submit" value="search" class="btn-primary" />
+    <button>
+        @Html.ActionLink("Create New", "Create")
+    </button>*@
+
+@using (Html.BeginForm("Index", "products", FormMethod.Get))
+{
+
+    <input type="text" name="search" placeholder="enter product name" class="" />
+    <input type="submit" value="Search" name="submit" class="btn btn-success" />
+    <input type="button" value="Create" name="create"  id="create" class="btn btn-primary" />
+        @*<input type="button" name="create" id="create" class="=btn btn-primary" value="Create"  />*@
+    
+    @*<input type="button" id="create" value="Create New" />*@
+
+
+}
+<br />
+<table class="table">
+    <tr class="">
+        <th>
+           @* @Html.DisplayNameFor(model => model.First().product_name)*@ Product Name
+        </th>
+        <th>
+          @*  @Html.DisplayNameFor(model => model.First().model_year)*@ Model Year
+        </th>
+        <th>
+         @*   @Html.DisplayNameFor(model => model.First().list_price)*@ List Price
+        </th>
+        <th>
+         @*   @Html.DisplayNameFor(model => model.First().brand.brand_name)*@ Brand Name
+        </th>
+        <th>
+         @*   @Html.DisplayNameFor(model => model.First().category.category_name)*@ Category Name
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.product_name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.model_year)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.list_price)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.brand.brand_name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.category.category_name)
+    </td>
+    <td>
+        <input type="button" name="edit" id="EditDetails" class="btn btn-primary" value="Edit" />|
+       @* @Html.ActionLink("Edit", "Edit", new { id = item.product_id }) |*@
+        <input type="button" name="details" id="ViewDetails" class="btn btn-info" value="Details" />|
+        @*@Html.ActionLink("Details", "Details", new { id = item.product_id })*@ 
+        <input type="button" name="Delete" id="DeleteDetails"  class="btn btn-danger" value="Delete" />
+        @*@Html.ActionLink("Delete", "Delete", new { id = item.product_id })*@
+    </td>
+</tr>
+    }
+
+</table>
+
+
+@Html.PagedListPager(Model,i=>Url.Action("Index","products",new {i, prodname = Request.QueryString["prodname"] }))
+
+@*Modal for CREATE NEW PRODUCT*@
+<div class="modal fade" id="Mycreate" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        <h4>Add new product</h4>
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>Product Name</label>
+                        <input type="text" name="productname" placeholder="new product name" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Brand Name</label>
+                        <input type="text" name="brandid" placeholder="Trek" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Category Name</label>
+                        <input type="text" name="categoryname" placeholder="category name" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Model year</label>
+                        <input type="number" name="Modelyear" placeholder="year" class="form-control" maxlength="4" min="4" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>List Price</label>
+                        <input type="number" name="listprice" placeholder="R00.000" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Create" id="create" class="btn btn-default" />
+                        </div>
+                    </div>
+
+
+                }
+
+                <div>
+                    @Html.ActionLink("Back to List", "Index")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*Edit Modal View*@
+
+<div class="modal fade" id="MViewDetails" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h2> Product Details</h2>
+
+                <div>
+                  @*  <h4>product</h4>*@
+                    <hr />
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.First().product_name)*@ Product Name :
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.First().product_name)
+                        </dd>
+
+                        <dt>
+                          @*  @Html.DisplayNameFor(model => model.First().model_year)*@ Model Year :
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.First().model_year)
+                        </dd>
+
+                        <dt>
+                         @*   @Html.DisplayNameFor(model => model.First().list_price)*@ List Price :
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.First().list_price)
+                        </dd>
+
+                        <dt>
+                       @*     @Html.DisplayNameFor(model => model.First().brand.brand_name)*@ Brand Name : 
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.First().brand.brand_name)
+                        </dd>
+
+                        <dt>
+                           @* @Html.DisplayNameFor(model => model.First().category.category_name)*@ Category Name
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.First().category.category_name)
+                        </dd>
+
+                    </dl>
+                </div>
+                <p>
+                    <input type="button" name="edit" id="EditDetails" class="btn btn-primary" value="Edit" disabled="disabled" />
+                    @* @Html.ActionLink("Edit", "Edit", new { id = Model.First().product_id }) |*@
+                    @Html.ActionLink("Back to List", "Index")
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*Modal View for edit*@
+
+<div class="modal fade" id="MEditDetails" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h2>Edit Product Details below   </h2>
+
+
+                <div class="form-horizontal">
+                    @* <h4>product</h4>*@
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.First().product_id)
+                    <label>Product Name</label>
+                    <div class="form-group">
+                        @*  @Html.LabelFor(model => model.First().product_name, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                       
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.First().product_name, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.First().product_name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    @*<div class="form-group">
+         @Html.LabelFor(model => model.First().brand_id, "brand_id", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+           @Html.DropDownList("brand_id", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.First().brand_id, "", new { @class = "text-danger" })
+             </div>
+
+        </div>*@
+                    <label>Brand Name</label>
+                    <div class="form-group">
+                        @*   @Html.LabelFor(model => model.First().brand.brand_name, htmlAttributes: new { @class = "control-label col-md-2" })*@
+
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.First().brand.brand_name, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.First().brand.brand_name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    @*<div class="form-group">
+            @Html.LabelFor(model => model.First().category_id, "category_id", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("category_id", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.First().category_id, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+                    <label>Ctagory Name</label>
+                    <div class="form-group">
+                        @*   @Html.LabelFor(model => model.First().category.category_name, htmlAttributes: new { @class = "control-label col-md-2" })*@
+
+                        <div class="col-md-10">
+
+                            @Html.EditorFor(model => model.First().category.category_name, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.First().brand.brand_name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <label>Model Year</label>
+                    <div class="form-group">
+                        @*   @Html.LabelFor(model => model.First().model_year, htmlAttributes: new { @class = "control-label col-md-2" })*@
+
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.First().model_year, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.First().model_year, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <label>List Price</label>
+                    <div class="form-group">
+
+                        @* @Html.LabelFor(model => model.First().list_price, htmlAttributes: new { @class = "control-label col-md-2" })*@
+
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.First().list_price, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.First().list_price, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div>
+                    @Html.ActionLink("Back to List", "Index")
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*Modal View for Delete*@
+
+<div class="modal fade" id="MDeleteDetails" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h2>Delete</h2>
+
+                <h3>Are you sure you want to delete this?</h3>
+                <div>
+                    <h4>product</h4>
+                    <hr />
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.First().product_name)*@ Product Name :
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.First().product_name)
+                        </dd>
+
+                        <dt>
+                            @*  @Html.DisplayNameFor(model => model.First().model_year)*@ Model Year :
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.First().model_year)
+                        </dd>
+
+                        <dt>
+                            @*   @Html.DisplayNameFor(model => model.First().list_price)*@ List Price :
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.First().list_price)
+                        </dd>
+
+                        <dt>
+                            @*     @Html.DisplayNameFor(model => model.First().brand.brand_name)*@ Brand Name :
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.First().brand.brand_name)
+                        </dd>
+
+                        <dt>
+                            @* @Html.DisplayNameFor(model => model.First().category.category_name)*@ Category Name
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.First().category.category_name)
+                        </dd>
+
+                    </dl>
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-actions no-color">
+                            <input type="submit" value="Delete" class="btn btn-default" /> |
+                            @Html.ActionLink("Back to List", "Index")
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            /*createModal*/
+            $("#create").click(function (e) {
+                $("#Mycreate").modal('show');
+            });
+
+            //edit modal
+            $("#EditDetails").click(function (e) {
+                $("#MEditDetails").modal('show');
+            });
+            //Details modal
+            $("#ViewDetails").click(function (e) {
+                $("#MViewDetails").modal('show');
+            });
+            //DeleteModal
+            $("#DeleteDetails").click(function (e) {
+                $("#MDeleteDetails").modal('show');
+            });
+        });
+
+
+        
+    </script>
+}
